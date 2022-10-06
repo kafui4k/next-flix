@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
+import NavBar from "../components/nav/navbar";
 import Banner from "../components/banner/banner";
 
 export default function Home() {
@@ -12,14 +13,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Next-Flix</h1>
+      <NavBar username="kafui.alordo@gmail.com" />
+
       <Banner
         title="On the road..."
         subTItle="On the Come up!"
         imgUrl="/static/clifford.jpg"
       />
-      {/* <NavBar />
-      <Card /> */}
+      {/* <Card /> */}
     </div>
   );
 }
