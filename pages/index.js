@@ -34,7 +34,7 @@ export default function Home({
       </Head>
 
       <div className={styles.main}>
-        <NavBar username="kafui.alordo@gmail.com" />
+        <NavBar />
 
         <Banner
           title="On the road..."
