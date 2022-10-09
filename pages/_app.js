@@ -14,7 +14,6 @@ function MyApp({ Component, pageProps }) {
     async function fetchData() {
       try {
         const isLoggedIn = await magic.user.isLoggedIn();
-
         if (isLoggedIn) {
           console.log(isLoggedIn); // => `true` or `false`
           router.push("/");

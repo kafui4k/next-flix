@@ -40,6 +40,7 @@ export default function Home({
           title="On the road..."
           subTItle="On the Come up!"
           imgUrl="/static/clifford.jpg"
+          videoId="4zH5iYM4wJo"
         />
 
         <div className={styles.sectionWrapper}>
