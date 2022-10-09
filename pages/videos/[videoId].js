@@ -3,24 +3,22 @@ import Modal from "react-modal";
 
 import styles from "../../styles/Video.module.css";
 
+import NavBar from "../../components/nav/navbar";
+
 import cls from "classnames";
+import { getYoutubeVideoById } from "../../lib/videos";
+import Head from "next/head";
 
 Modal.setAppElement("#__next");
 
-export async function getStaticProps() {
-  // fetch data from API
-  const video = {
-    title: "Hi cute dog",
-    publishTime: "1990-01-01",
-    description:
-      "A big red dog that is super cute, can he get any better,A big red dog that is super cute, can he get any betterA big red dog that is super cute, can he get any betterA big red dog that is super cute, can he get any better A big red dog that is super cute, can he get any better, A big red dog that is super cute, can he get any better, A big red dog that is super cute, can he get any better, A big red dog that is super cute, can he get any better, A big red dog that is super cute, can he get any better, A big red dog that is super cute, can he get any better",
-    channelTitle: "Paramount Pictures",
-    viewCount: 10000,
-  };
+export async function getStaticProps(context) {
+  const videoId = context.params.videoId;
+
+  const videoArray = await getYoutubeVideoById(videoId);
 
   return {
     props: {
-      video,
+      video: videoArray.length > 0 ? videoArray[0] : {},
     },
 
     revalidate: 10, // In seconds
@@ -44,6 +42,12 @@ const Video = ({ video }) => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>{title}</title>
+      </Head>
+
+      <NavBar />
+
       <Modal
         isOpen={true}
         contentLabel="Watch the Video"
@@ -58,7 +62,7 @@ const Video = ({ video }) => {
           width="100%"
           height="360"
           src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
-          frameborder="0"
+          frameBorder="0"
         ></iframe>
 
         <div className={styles.modalBody}>
@@ -77,7 +81,9 @@ const Video = ({ video }) => {
 
               <p className={cls(styles.subText, styles.subTextWrapper)}>
                 <span className={styles.textColor}>View Count: </span>
-                <span className={styles.channelTitle}>{viewCount}</span>
+                <span className={styles.channelTitle}>
+                  {viewCount.viewCount}
+                </span>
               </p>
             </div>
           </div>
