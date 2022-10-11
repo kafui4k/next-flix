@@ -39,7 +39,6 @@ const Login = () => {
 
     if (email) {
       if (email === "kalordo7@gmail.com") {
-        // log in a user by their email
         try {
           setLoading(true);
 
@@ -47,10 +46,23 @@ const Login = () => {
             email,
           });
 
-          console.log({ didToken });
-
           if (didToken) {
-            router.push("/");
+            const response = await fetch("/api/login", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${didToken}`,
+                "Content-Type": "application/json",
+              },
+            });
+
+            const loggedInResponse = await response.json();
+
+            if (loggedInResponse.done) {
+              router.push("/");
+            } else {
+              setLoading(false);
+              console.error("Something went wrong logging in", error);
+            }
           }
         } catch (error) {
           // Handle errors if required!
