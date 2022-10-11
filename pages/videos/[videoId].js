@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 
@@ -8,6 +9,9 @@ import NavBar from "../../components/nav/navbar";
 import cls from "classnames";
 import { getYoutubeVideoById } from "../../lib/videos";
 import Head from "next/head";
+
+import Like from "../../components/icons/like-icon";
+import DisLike from "../../components/icons/dislike-icon";
 
 Modal.setAppElement("#__next");
 
@@ -38,7 +42,22 @@ export async function getStaticPaths() {
 const Video = ({ video }) => {
   const router = useRouter();
 
+  const [toggleLike, setToggleLike] = useState(false);
+  const [toggleDisLike, setToggleDisLike] = useState(false);
+
   const { title, publishTime, description, channelTitle, viewCount } = video;
+
+  const handleToggleLike = () => {
+    console.log("ahdnle like");
+    setToggleLike(!toggleLike);
+    setToggleDisLike(toggleLike);
+  };
+
+  const handleToggleDisLike = () => {
+    console.log("handle dis like");
+    setToggleDisLike(!toggleDisLike);
+    setToggleLike(toggleDisLike);
+  };
 
   return (
     <div className={styles.container}>
@@ -64,6 +83,21 @@ const Video = ({ video }) => {
           src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
           frameBorder="0"
         ></iframe>
+
+        <div className={styles.likeDislikeBtnWrapper}>
+          <div className={styles.likeBtnWrapper}>
+            <button onClick={handleToggleLike}>
+              <div className={styles.btnWrapper}>
+                <Like selected={toggleLike} />
+              </div>
+            </button>
+          </div>
+          <button onClick={handleToggleDisLike}>
+            <div className={styles.btnWrapper}>
+              <DisLike selected={toggleDisLike} />
+            </div>
+          </button>
+        </div>
 
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
