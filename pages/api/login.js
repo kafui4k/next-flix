@@ -30,7 +30,6 @@ export default async function login(req, res) {
 
       // set cookie here
       setTokenCookie(token, res);
-
       res.send({ done: true });
     } catch (error) {
       console.error("Something went wrong loggin in", error);

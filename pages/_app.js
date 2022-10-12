@@ -15,7 +15,6 @@ function MyApp({ Component, pageProps }) {
       try {
         const isLoggedIn = await magic.user.isLoggedIn();
         if (isLoggedIn) {
-          console.log(isLoggedIn); // => `true` or `false`
           router.push("/");
         } else {
           router.push("/login");
@@ -26,7 +25,7 @@ function MyApp({ Component, pageProps }) {
       }
     }
     fetchData();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const handleComplete = () => {

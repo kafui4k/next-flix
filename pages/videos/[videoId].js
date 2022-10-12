@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 
@@ -42,21 +42,65 @@ export async function getStaticPaths() {
 const Video = ({ video }) => {
   const router = useRouter();
 
+  const videoId = router.query.videoId;
+
   const [toggleLike, setToggleLike] = useState(false);
   const [toggleDisLike, setToggleDisLike] = useState(false);
 
   const { title, publishTime, description, channelTitle, viewCount } = video;
 
-  const handleToggleLike = () => {
-    console.log("ahdnle like");
-    setToggleLike(!toggleLike);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`/api/stats?videoId=${videoId}`, {
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      if (data.length > 0) {
+        const favourited = data[0].favourited;
+        if (favourited === 1) {
+          setToggleLike(true);
+        } else if (favourited === 0) {
+          setToggleDisLike(true);
+        }
+      }
+    }
+    fetchData();
+  }, [videoId]);
+
+  const handleToggleLike = async () => {
+    const val = !toggleLike;
+    setToggleLike(val);
     setToggleDisLike(toggleLike);
+
+    return await fetch("/api/stats", {
+      method: "POST",
+      body: JSON.stringify({
+        videoId,
+        favourited: val ? 1 : 0,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
-  const handleToggleDisLike = () => {
-    console.log("handle dis like");
-    setToggleDisLike(!toggleDisLike);
+  const handleToggleDisLike = async () => {
+    const val = !toggleDisLike;
+    setToggleDisLike(val);
     setToggleLike(toggleDisLike);
+
+    return await fetch("/api/stats", {
+      method: "POST",
+      body: JSON.stringify({
+        videoId,
+        favourited: !val ? 1 : 0,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   return (
@@ -80,7 +124,7 @@ const Video = ({ video }) => {
           type="text/html"
           width="100%"
           height="360"
-          src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
           frameBorder="0"
         ></iframe>
 

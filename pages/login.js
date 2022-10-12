@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { magic } from "../lib/magic-client";
@@ -24,7 +25,7 @@ const Login = () => {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, [router]);
+  }, []);
 
   const handleOnChangeEmail = (e) => {
     setUserMsg("");
@@ -38,7 +39,7 @@ const Login = () => {
     e.preventDefault();
 
     if (email) {
-      if (email === "kalordo7@gmail.com") {
+      if (email) {
         try {
           setLoading(true);
 
@@ -87,9 +88,11 @@ const Login = () => {
 
       <header className={styles.header}>
         <div className={styles.headerWrapper}>
-          <a className={styles.logoLink} href="/">
-            <div className={styles.logoWrapper}>NextFlix</div>
-          </a>
+          <Link href="/">
+            <a className={styles.logoLink}>
+              <div className={styles.logoWrapper}>NextFlix</div>
+            </a>
+          </Link>
         </div>
       </header>
 

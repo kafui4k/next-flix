@@ -17,7 +17,6 @@ const NavBar = () => {
         const { email, issuer } = await magic.user.getMetadata();
         const didToken = await magic.user.getIdToken();
 
-        console.log({ didToken });
         if (email) {
           setUsername(email);
         } else {
@@ -51,7 +50,6 @@ const NavBar = () => {
 
     try {
       await magic.user.logout();
-      console.log(await magic.user.isLoggedIn()); // => `false`
       router.push("/login");
     } catch (error) {
       // Handle errors if required!
@@ -63,9 +61,11 @@ const NavBar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        <a className={styles.logoLink} href="/">
-          <div className={styles.logoWrapper}>NextFlix</div>
-        </a>
+        <Link href="/">
+          <a className={styles.logoLink}>
+            <div className={styles.logoWrapper}>NextFlix</div>
+          </a>
+        </Link>
 
         <ul className={styles.navItems}>
           <li className={styles.navItem} onClick={handleOnClickHome}>

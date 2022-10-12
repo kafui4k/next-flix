@@ -5,9 +5,27 @@ import NavBar from "../components/nav/navbar";
 import Banner from "../components/banner/banner";
 import SectionCards from "../components/card/section-cards";
 
-import { getPopularVideos, getVideos } from "../lib/videos";
+import {
+  getPopularVideos,
+  getVideos,
+  getWatchedItAgainVideos,
+} from "../lib/videos";
+import useRedirectUser from "../utils/redirect-user";
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const { token, userId } = await useRedirectUser(context);
+
+  if (!userId) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const watchItAgainVideos = await getWatchedItAgainVideos(userId, token);
   const disneyVideos = await getVideos("disney trailer");
   const vanLifeAndTravels = await getVideos("van life and travels");
   const spaceExploration = await getVideos("spacex exploration");
@@ -15,11 +33,18 @@ export async function getServerSideProps() {
 
   // Pass data to the page via props
   return {
-    props: { disneyVideos, vanLifeAndTravels, spaceExploration, popularVideos },
+    props: {
+      watchItAgainVideos,
+      disneyVideos,
+      vanLifeAndTravels,
+      spaceExploration,
+      popularVideos,
+    },
   };
 }
 
 export default function Home({
+  watchItAgainVideos = [],
   disneyVideos,
   vanLifeAndTravels,
   spaceExploration,
@@ -45,6 +70,11 @@ export default function Home({
 
         <div className={styles.sectionWrapper}>
           <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards
+            title="Watch it again"
+            videos={watchItAgainVideos}
+            size="small"
+          />
           <SectionCards
             title="Space Exploration"
             videos={spaceExploration}
