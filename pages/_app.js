@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
       }
     }
     fetchData();
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const handleComplete = () => {

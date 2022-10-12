@@ -67,7 +67,7 @@ const Video = ({ video }) => {
       }
     }
     fetchData();
-  }, [videoId]);
+  }, []);
 
   const handleToggleLike = async () => {
     const val = !toggleLike;
